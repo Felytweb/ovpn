@@ -1,10 +1,10 @@
 #!/bin/bash
 #
-# https://github.com/Nyr/openvpn-install
+# Разработчик Chieftain
 #
-# Copyright (c) 2013 Nyr. Released under the MIT License.
+# Telegram @ChieftainQ
 
-
+Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
 # Detect Debian users running the script with "sh" instead of bash
 if readlink /proc/$$/exe | grep -q "dash"; then
 	echo 'This installer needs to be run with "bash", not "sh".'
@@ -431,15 +431,13 @@ verb 3" > /etc/openvpn/server/client-common.txt
 	echo "Новые клиенты могут быть добавлены повторным запуском этого скрипта.."
 else
 	clear
-	echo "
-	
-                        ||| Chieftain OpenVpn USER CONTROL ||| 
-"
-	echo
+	echo  -e " ${Green_background_prefix}Chieftain OpenVpn USER CONTROL${Font_color_suffix} "
+	total_users=$(tail -n +2 /etc/openvpn/server/easy-rsa/pki/index.txt | grep -c "^V")
+	echo " Всего клиентов $total_users"
 	echo "Выберите вариант:"
 	echo "   1) Создать новый ключ"
 	echo "   2) Удалить существующий ключ"
-	echo "   3) Удалить скрипт"
+	echo -e "   3) ${Red_background_prefix}Удалить скрипт${Font_color_suffix}"
 	echo "   4) Выйти"
 	read -p "Выбор: " option
 	until [[ "$option" =~ ^[1-4]$ ]]; do
@@ -465,9 +463,8 @@ else
 			echo "Ключ $client создан. Ключ расположен в:" ~/"$client.ovpn"
 		    echo
 		    echo
-			echo "                 Ссылка на скачивание ключа"
-			echo
-			curl -F "file=@/root/$client.ovpn" "https://file.io" && echo -e
+			echo -e "${Green_font_prefix} Ссылка на скачивание ключа${Font_color_suffix}"
+			curl -F "file=@/root/$client.ovpn" "https://file.io" && echo -e ${Green_font_prefix}${Font_color_suffix}
 			exit
 		;;
 		2)
@@ -506,16 +503,16 @@ else
 				echo "Ключ $client удалён!"
 			else
 				echo
-				echo "Успешная отмена!"
+				echo "Отменено!"
 			fi
 			exit
 		;;
 		3)
 			echo
-			read -p "Confirm OpenVPN removal? [y/N]: " remove
+			read -p "Уверены что хотите удалить скрипт? [y/N]: " remove
 			until [[ "$remove" =~ ^[yYnN]*$ ]]; do
 				echo "$remove: invalid selection."
-				read -p "Confirm OpenVPN removal? [y/N]: " remove
+				read -p "Уверены что хотите удалить скрипт? [y/N]: " remove
 			done
 			if [[ "$remove" =~ ^[yY]$ ]]; then
 				port=$(grep '^port ' /etc/openvpn/server/server.conf | cut -d " " -f 2)
@@ -554,10 +551,10 @@ else
 					yum remove -y openvpn
 				fi
 				echo
-				echo "OpenVPN removed!"
+				echo "Скрипт удалён!"
 			else
 				echo
-				echo "OpenVPN removal aborted!"
+				echo "Удаление отменено!"
 			fi
 			exit
 		;;
