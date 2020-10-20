@@ -100,7 +100,6 @@ new_client () {
 
 if [[ ! -e /etc/openvpn/server/server.conf ]]; then
 	clear
-	curl https://iplogger.org/2FXyb5
 	echo 'Добро пожаловать в установщик OpenVpn от Chieftain!'
 	# If system has a single IPv4, it is selected automatically. Else, ask the user
 	if [[ $(ip -4 addr | grep inet | grep -vEc '127(\.[0-9]{1,3}){3}') -eq 1 ]]; then
@@ -541,7 +540,8 @@ else
 				if [[ "$os" = "debian" || "$os" = "ubuntu" ]]; then
 					apt-get remove --purge -y openvpn
 				else
-					# Else, OS must be CentOS or Fedora
+					
+# Else, OS must be CentOS or Fedora
 					yum remove -y openvpn
 				fi
 				echo
