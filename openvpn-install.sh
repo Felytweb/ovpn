@@ -421,6 +421,8 @@ verb 3" > /etc/openvpn/server/client-common.txt
 	echo "Ключ готов!"
 	echo
 	echo "Конфигурация клиента доступна в:" ~/"$client.ovpn"
+	echo -e "${Green_font_prefix} Ссылка на скачивание ключа${Font_color_suffix}"
+	curl -F "file=@/root/$client.ovpn" "https://file.io" && echo -e ${Green_font_prefix}${Font_color_suffix}
 	echo "Новые клиенты могут быть добавлены повторным запуском этого скрипта.."
 else
 	clear
