@@ -601,7 +601,7 @@ else
 	number_of_clients=$(tail -n +2 /etc/openvpn/server/easy-rsa/pki/index.txt | grep -c "^V")
 	number_of_active=$(cat /var/log/openvpn/openvpn-status.log | grep CLIENT_LIST | tail -n +2 | grep -c CLIENT_LIST)
 	echo -e "Скрипт установки и модерации сервера OpenVPN ${Red_font_prefix}[v${sh_ver}]${Font_color_suffix}
-	---- chieftain|tg:@chieftaine|jb:idiomget@gmail.com ----"
+	---- chieftain|tg:@chieftaine|mail:idiomget@gmail.com ----"
 	echo
 echo -e "Приветствую, администратор сервера!  Дата: $(date +"%d-%m-%Y")
   Всего пользователей на сервере:" $number_of_clients
